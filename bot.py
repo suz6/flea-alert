@@ -80,6 +80,8 @@ def format_event(ev):
         if ev.get("fee"):
             info.append("💰 " + e(ev["fee"]))
         lines += ["", "\n".join(info)]
+        if ev.get("seller") == "주민한정":
+            lines.append(f"🏠 <b>{e(ev.get('resident_area') or '지역')} 주민만 신청 가능</b>")
         lines.append(f"🧾 자격: {e(ev.get('seller') or '불명')} · 중고: {e(ev.get('used_goods') or '불명')}"
                      + (f" ({e(ev['item_note'])})" if ev.get("item_note") else ""))
         if ev.get("apply_link"):

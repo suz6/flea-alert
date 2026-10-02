@@ -19,7 +19,8 @@ PROMPT = """너는 벼룩시장·나눔장터·플리마켓 '판매자 모집' �
 [{{"id": 글 번호(정수),
   "is_recruit": 판매자·셀러·참가자 '모집' 공고면 true. 행사 후기, 방문 홍보, 구매자 안내, 지난 행사 회고는 false,
   "market_name": 장터 이름(모르면 ""),
-  "seller": "개인가능" | "사업자·전문셀러" | "작가·핸드메이드" | "불명",
+  "seller": "개인가능" | "주민한정" | "사업자·전문셀러" | "작가·핸드메이드" | "대상제한" | "불명",
+  "resident_area": seller가 "주민한정"일 때 대상 지역(예: "여주시", "서울 강서구 화곡1동"), 아니면 "",
   "used_goods": "가능" | "불가" | "제한" | "불명",
   "item_note": 품목 제한 내용 짧게(없으면 ""),
   "region": "서울" | "경기" | "인천" | "기타" | "불명",
@@ -34,9 +35,14 @@ PROMPT = """너는 벼룩시장·나눔장터·플리마켓 '판매자 모집' �
 판단 기준:
 - 사업자등록증 필요, 브랜드·전문 셀러·입점업체 모집 → seller "사업자·전문셀러"
 - 핸드메이드·창작품·작가만 → seller "작가·핸드메이드"
+- 판매자가 어린이·청소년·학생만(어린이장터 등), 특정 단지 입주민·회원·조합원만, 파트너·협력기관만 → seller "대상제한" (사용자는 성인 일반인)
+- 성인도 신청할 수 있지만 특정 시·구·동 주민(관내 거주자, ○○구민 등)만 가능 → seller "주민한정" + resident_area
 - 중고, 나눔, 누구나, 카테고리 제한 없음 → used_goods "가능"
 - 푸드·체험·공연 분야만 모집 → used_goods "불가"
-- 의류만 가능처럼 품목이 정해져 있으면 → used_goods "제한" + item_note
+- 판매 품목이 수공예품·농산품·먹거리·지역 특산품처럼 중고물품이 아닌 것뿐이면 → used_goods "불가" ('벼룩시장'이라는 이름만 보고 "가능"이라 하지 말 것)
+- 곤충·반려동물·식물·특정 취미 용품처럼 특수한 주제 전문 장터 → used_goods "불가" + item_note
+- 의류·도서·장난감·생활용품 등 일반 가정 중고품 중 일부만 가능하면 → used_goods "제한" + item_note
+- region은 본문 주소뿐 아니라 글 주소(URL)와 카페·블로그 이름도 단서로 써 (예: cafe.daum.net/daegumam → 대구 → "기타")
 {feedback}
 [글 목록]
 {items}"""
@@ -57,7 +63,8 @@ def analyze(items, usage, feedback=""):
             break
         batch = items[i:i + LLM_BATCH]
         listing = "\n\n".join(
-            f"[글 {n}] 제목: {it['title']}\n본문: {it['text'][:2500]}" for n, it in enumerate(batch))
+            f"[글 {n}] 제목: {it['title']}\n주소: {it.get('url', '')} ({it.get('source', '')})\n"
+            f"본문: {it['text'][:2500]}" for n, it in enumerate(batch))
         prompt = PROMPT.format(today=day, feedback=feedback, items=listing)
         try:
             r = requests.post(

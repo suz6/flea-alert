@@ -178,7 +178,7 @@ def decide(a, use_fit=False):
     if region not in ALLOWED_REGION_LABELS and region != "불명":
         return None
     seller = a.get("seller", "불명")
-    if seller in ("사업자·전문셀러", "작가·핸드메이드"):
+    if seller in ("사업자·전문셀러", "작가·핸드메이드", "대상제한"):
         return None
     used = a.get("used_goods", "불명")
     if used == "불가":
@@ -205,7 +205,7 @@ def build_event(it, a, label):
         "event_date": a.get("event_date", ""), "deadline": a.get("deadline", ""),
         "fee": a.get("fee", ""), "apply_link": a.get("apply_link", ""),
         "seller": a.get("seller", ""), "used_goods": a.get("used_goods", ""),
-        "item_note": a.get("item_note", ""),
+        "item_note": a.get("item_note", ""), "resident_area": a.get("resident_area", ""),
         "snippet": "" if a else it.get("text", "")[:400],
         "llm": bool(a), "found_at": time.time(), "notified": False,
     }
