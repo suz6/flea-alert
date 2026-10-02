@@ -1,5 +1,7 @@
 @echo off
 cd /d %~dp0
+set PYTHONUTF8=1
+set PYTHONIOENCODING=utf-8
 echo ===== %date% %time% ===== >> ig_log.txt
 git pull --rebase --autostash >> ig_log.txt 2>&1
 python ig_collect.py >> ig_log.txt 2>&1
