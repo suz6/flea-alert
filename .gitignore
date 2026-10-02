@@ -1,0 +1,5 @@
+.env
+ig_state.json
+data/ig_local_state.json
+ig_log.txt
+__pycache__/
