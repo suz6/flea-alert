@@ -24,11 +24,12 @@ def naver(keyword):
     cid, secret = os.environ.get("NAVER_CLIENT_ID"), os.environ.get("NAVER_CLIENT_SECRET")
     if not cid or not secret:
         return []
-    headers = {"X-Naver-Client-Id": cid, "X-Naver-Client-Secret": secret}
+    # 2026-07-31 개발자센터 신규 발급 종료 → NAVER API HUB(네이버 클라우드) 키 사용
+    headers = {"X-NCP-APIGW-API-KEY-ID": cid, "X-NCP-APIGW-API-KEY": secret}
     out = []
     for kind, label in [("blog", "네이버 블로그"), ("cafearticle", "네이버 카페"), ("news", "네이버 뉴스")]:
         try:
-            r = requests.get(f"https://openapi.naver.com/v1/search/{kind}.json",
+            r = requests.get(f"https://naverapihub.apigw.ntruss.com/search/v1/{kind}",
                              params={"query": keyword, "display": 30, "sort": "date"},
                              headers=headers, timeout=15)
             r.raise_for_status()

@@ -37,7 +37,7 @@
 aistudio.google.com → Get API key → `GEMINI_API_KEY` (카드 등록 필요 없음, 결제 연결하지 마세요)
 
 **네이버 검색 API**
-developers.naver.com → 애플리케이션 등록 → "검색" 선택 → `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`
+⚠️ **현재 비추천** — 2026-07-31 개발자센터 신규 발급 종료, NAVER API HUB(네이버 클라우드)는 결제수단 등록 필수·향후 유료 예정, 2026-09-07 약관에서 검색 결과의 AI 입력 금지(이 프로그램은 Gemini에 넣음). 키가 없으면 네이버는 자동으로 건너뜀. 쓰려면: console.ncloud.com → NAVER API HUB 이용 신청 → Application 등록(검색) → `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`
 
 **카카오(다음) 검색 API**
 developers.kakao.com → 앱 만들기 → REST API 키 → `KAKAO_REST_KEY`
