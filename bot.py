@@ -28,7 +28,7 @@ def call(method, **payload):
         if r.status_code == 429:
             time.sleep(r.json().get("parameters", {}).get("retry_after", 5) + 1)
             continue
-        if not r.ok:
+        if not r.ok and "message is not modified" not in r.text:   # 이미 같은 버튼 상태면 무시
             print("텔레그램 오류:", method, r.text[:200])
         return r.json()
     return None
