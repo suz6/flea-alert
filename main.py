@@ -45,7 +45,7 @@ def main():
         it["text"] = it["title"] + "\n" + full_text(it)
 
     all_events = {**events, **ig_events}
-    fb_text, has_dislikes = feedback_examples(all_events, status)
+    fb_text, has_dislikes = feedback_examples(all_events, status, state.get("prefs", []))
     analyses = analyze(cands, state.setdefault("llm_usage", {}), fb_text)
 
     known = {ev["ekey"] for ev in all_events.values() if ev.get("ekey")}

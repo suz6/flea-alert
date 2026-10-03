@@ -105,7 +105,7 @@ def main():
         browser.close()
 
     all_events = {**events, **ig_events}
-    fb_text, has_dislikes = feedback_examples(all_events, status)
+    fb_text, has_dislikes = feedback_examples(all_events, status, load_json(DATA / "state.json", {}).get("prefs", []))
     analyses = analyze(cands, local.setdefault("llm_usage", {}), fb_text)
     known = {ev["ekey"] for ev in all_events.values() if ev.get("ekey")}
 

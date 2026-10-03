@@ -213,20 +213,28 @@ def build_event(it, a, label):
     return ev
 
 
-def feedback_examples(all_events, status, n=6):
+def feedback_examples(all_events, status, prefs=(), n=8):
+    """버튼·답장 기록과 사용자가 직접 보낸 기준 → LLM 프롬프트 문단"""
     likes, dislikes = [], []
-    for eid, st in sorted(status.items(), key=lambda x: -x[1].get("at", 0)):
+    # 이유(답장)가 달린 기록을 먼저, 그다음 최신순
+    for eid, st in sorted(status.items(), key=lambda x: (not x[1].get("note"), -x[1].get("at", 0))):
         ev, fb = all_events.get(eid), st.get("feedback")
         if not ev or fb not in ("like", "dislike"):
             continue
         desc = ev.get("summary") or ev.get("snippet", "")[:120]
         line = f"- {ev.get('name') or ev.get('title')}: {desc}"
+        if st.get("note"):
+            line += f" → 사용자 의견: {st['note']}"
         (likes if fb == "like" else dislikes).append(line)
-    if not likes and not dislikes:
-        return "", False
-    txt = "\n[사용자 피드백 예시] 아래와 비슷한 정도로 user_fit을 판단해.\n"
-    if likes:
-        txt += "원했던 공고:\n" + "\n".join(likes[:n]) + "\n"
-    if dislikes:
-        txt += "원하지 않았던 공고:\n" + "\n".join(dislikes[:n]) + "\n"
-    return txt, bool(dislikes)
+    txt = ""
+    if prefs:
+        txt += ("\n[사용자가 직접 정한 기준] 아래 중 하나라도 해당하면 user_fit을 \"낮음\"으로 해.\n"
+                + "\n".join(f"- {p}" for p in prefs) + "\n")
+    if likes or dislikes:
+        txt += ("\n[사용자 피드백 예시] 아래와 비슷한 정도로 user_fit을 판단해. "
+                "'사용자 의견'은 이유이니 비슷한 이유에 해당하는 글도 같은 방향으로 판단해.\n")
+        if likes:
+            txt += "원했던 공고:\n" + "\n".join(likes[:n]) + "\n"
+        if dislikes:
+            txt += "원하지 않았던 공고:\n" + "\n".join(dislikes[:n]) + "\n"
+    return txt, bool(dislikes or prefs)

@@ -105,15 +105,70 @@ LABELS = {"like": "👍 관심으로 기록했어요", "dislike": "👎 앞으�
           "applied": "📝 신청함으로 표시했어요 (주간 정리에서 빠져요)"}
 
 
+URL_RE = re.compile(r"🔗 (\S+)")
+LIKE_WORDS = ["좋", "관심", "괜찮", "👍"]
+MAX_PREFS = 30
+
+
+def _reply(chat_id, text, to=None):
+    payload = {"chat_id": chat_id, "text": text}
+    if to:
+        payload["reply_parameters"] = {"message_id": to, "allow_sending_without_reply": True}
+    call("sendMessage", **payload)
+
+
+def _handle_text(msg, state, status):
+    """답장 = 그 공고에 대한 이유 / 그냥 메시지 = 항상 적용할 기준"""
+    from common import event_id, norm_url
+    text = (msg.get("text") or "").strip()
+    chat, mid = msg["chat"]["id"], msg["message_id"]
+    if not text or text.startswith("/"):
+        return
+    prefs = state.setdefault("prefs", [])
+    replied = msg.get("reply_to_message") or {}
+    m = URL_RE.search(replied.get("text") or "")
+    if m:
+        eid = event_id(norm_url(m.group(1)))
+        st = status.setdefault(eid, {})
+        st["feedback"] = "like" if any(w in text for w in LIKE_WORDS) else "dislike"
+        st["note"] = text[:200]
+        st["at"] = time.time()
+        if replied.get("message_id"):
+            call("editMessageReplyMarkup", chat_id=chat, message_id=replied["message_id"],
+                 reply_markup={"inline_keyboard": buttons_for(eid, st)})
+        mark = "👍 관심" if st["feedback"] == "like" else "👎 해당 없음"
+        _reply(chat, f"{mark}으로 기록했어요. 이유: {st['note']}", mid)
+    elif text.replace(" ", "") == "기준목록":
+        body = "\n".join(f"{i}. {p}" for i, p in enumerate(prefs, 1)) or "(저장된 기준 없음)"
+        _reply(chat, "📋 저장된 기준\n" + body + "\n\n지우기: 기준 삭제 번호")
+    elif re.fullmatch(r"기준\s*삭제\s*\d+", text):
+        n = int(re.search(r"\d+", text).group())
+        if 1 <= n <= len(prefs):
+            _reply(chat, f"🗑 지웠어요: {prefs.pop(n - 1)}", mid)
+        else:
+            _reply(chat, f"{n}번 기준이 없어요. '기준 목록'으로 번호를 확인해 주세요.", mid)
+    elif m is None and replied:
+        _reply(chat, "공고 알림에 답장해 주셔야 그 공고의 이유로 기록돼요.", mid)
+    else:
+        prefs.append(text[:200])
+        del prefs[:-MAX_PREFS]
+        _reply(chat, f"📌 기준으로 저장했어요 ({len(prefs)}번): {text[:200]}\n"
+                     "목록 보기: 기준 목록 / 지우기: 기준 삭제 번호", mid)
+
+
 def process_feedback(state, status):
-    """버튼 누른 기록 가져오기 (GitHub Actions에서만 실행)"""
+    """버튼·답장·메시지 기록 가져오기 (GitHub Actions에서만 실행)"""
     _, chat_id = _token()
     res = call("getUpdates", offset=state.get("tg_offset", 0), timeout=0,
-               allowed_updates=["callback_query"])
+               allowed_updates=["callback_query", "message"])
     if not res or not res.get("ok"):
         return
     for u in res.get("result", []):
         state["tg_offset"] = u["update_id"] + 1
+        msg = u.get("message")
+        if msg and str(msg.get("chat", {}).get("id")) == str(chat_id):
+            _handle_text(msg, state, status)
+            continue
         cq = u.get("callback_query")
         if not cq:
             continue
