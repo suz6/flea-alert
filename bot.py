@@ -201,6 +201,7 @@ def process_feedback(state, status):
                allowed_updates=["callback_query", "message"])
     if not res or not res.get("ok"):
         return
+    pressed = set()   # 반응이 늦어 연달아 누른 같은 버튼은 한 번으로
     for u in res.get("result", []):
         state["tg_offset"] = u["update_id"] + 1
         msg = u.get("message")
@@ -214,13 +215,14 @@ def process_feedback(state, status):
         if str(msg.get("chat", {}).get("id")) != str(chat_id):
             continue
         action, _, eid = cq.get("data", "").partition(":")
-        if action not in LABELS:
+        if action not in LABELS or (action, eid) in pressed:
             continue
+        pressed.add((action, eid))
         st = status.setdefault(eid, {})
         if action == "applied":
             st["applied"] = not st.get("applied")
         else:
-            st["feedback"] = None if st.get("feedback") == action else action
+            st["feedback"] = action   # 👍/👎는 눌러도 꺼지지 않음 (바꾸려면 반대 버튼)
         st["at"] = time.time()
         call("editMessageReplyMarkup", chat_id=msg["chat"]["id"], message_id=msg["message_id"],
              reply_markup={"inline_keyboard": buttons_for(eid, st)})
