@@ -28,7 +28,8 @@ def call(method, **payload):
         if r.status_code == 429:
             time.sleep(r.json().get("parameters", {}).get("retry_after", 5) + 1)
             continue
-        if not r.ok and "message is not modified" not in r.text:   # 이미 같은 버튼 상태면 무시
+        # 같은 버튼 상태로 다시 그리기, 늦게 처리한 버튼 응답은 정상 상황이라 무시
+        if not r.ok and not any(s in r.text for s in ("message is not modified", "query is too old")):
             print("텔레그램 오류:", method, r.text[:200])
         return r.json()
     return None
