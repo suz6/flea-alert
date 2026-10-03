@@ -58,6 +58,12 @@ def buttons_for(eid, st=None):
     ]
 
 
+def apply_url(ev):
+    """신청 링크가 도메인만 남은 경우(https://forms.gle 등) 원문 링크로 대체"""
+    link = ev.get("apply_link") or ""
+    return link if re.match(r"https?://[^/\s]+/\S", link) else ev["url"]
+
+
 def fmt_day(s):
     from common import parse_date
     d = parse_date(s)
@@ -84,8 +90,8 @@ def format_event(ev):
             lines.append(f"🏠 <b>{e(ev.get('resident_area') or '지역')} 주민만 신청 가능</b>")
         lines.append(f"🧾 자격: {e(ev.get('seller') or '불명')} · 중고: {e(ev.get('used_goods') or '불명')}"
                      + (f" ({e(ev['item_note'])})" if ev.get("item_note") else ""))
-        if ev.get("apply_link"):
-            lines.append(f"✍️ 신청: {e(ev['apply_link'])}")
+        if ev.get("apply_link") and apply_url(ev) != ev["url"]:
+            lines.append(f"✍️ 신청: {e(apply_url(ev))}")
     else:
         body = ev.get("snippet", "")
         lines += ["", e(body[:400] + ("…" if len(body) > 400 else ""))]
@@ -106,7 +112,7 @@ LABELS = {"like": "👍 관심으로 기록했어요", "dislike": "👎 앞으�
 
 
 URL_RE = re.compile(r"🔗 (\S+)")
-LIKE_WORDS = ["좋", "관심", "괜찮", "👍"]
+LIKE_WORDS = ["좋", "관심", "괜찮", "굿", "good", "👍", "👌"]
 MAX_PREFS = 30
 
 
@@ -115,6 +121,36 @@ def _reply(chat_id, text, to=None):
     if to:
         payload["reply_parameters"] = {"message_id": to, "allow_sending_without_reply": True}
     call("sendMessage", **payload)
+
+
+def liked_list(status, html_mode=False):
+    """👍 누른 공고 (신청함·지난 공고 제외), 마감일 → 행사일 순"""
+    from common import DATA, load_json, parse_date, today_kst
+    events = {**load_json(DATA / "events.json", {}), **load_json(DATA / "ig_events.json", {})}
+    t = today_kst()
+    rows = []
+    for eid, st in status.items():
+        ev = events.get(eid)
+        if not ev or st.get("feedback") != "like" or st.get("applied"):
+            continue
+        dl, ed = parse_date(ev.get("deadline")), parse_date(ev.get("event_date"))
+        if (dl and dl < t) or (ed and ed < t):
+            continue
+        rows.append((dl or ed or t.replace(year=t.year + 1), ev))
+    rows.sort(key=lambda r: r[0])
+    e = html.escape if html_mode else (lambda x: x)
+    lines = []
+    for _, ev in rows:
+        when = (f"⏰ {fmt_day(ev['deadline'])} 마감" if ev.get("deadline")
+                else f"📅 행사 {fmt_day(ev['event_date'])}" if ev.get("event_date") else "⏰ 마감 미상")
+        name = e(ev.get("name") or ev["title"][:40])
+        lines.append(f"⭐ {when} | " + (f"<b>{name}</b>" if html_mode else name))
+        lines.append(f"    {e(apply_url(ev))}")
+    if html_mode:
+        return lines
+    if not lines:
+        return "⭐ 관심 공고가 없어요. 마음에 드는 알림에 👍를 눌러 주세요."
+    return "⭐ 관심 공고 (신청하면 📝 버튼을 눌러 주세요)\n" + "\n".join(lines)
 
 
 def _handle_text(msg, state, status):
@@ -130,7 +166,7 @@ def _handle_text(msg, state, status):
     if m:
         eid = event_id(norm_url(m.group(1)))
         st = status.setdefault(eid, {})
-        st["feedback"] = "like" if any(w in text for w in LIKE_WORDS) else "dislike"
+        st["feedback"] = "like" if any(w in text.lower() for w in LIKE_WORDS) else "dislike"
         st["note"] = text[:200]
         st["at"] = time.time()
         if replied.get("message_id"):
@@ -138,6 +174,8 @@ def _handle_text(msg, state, status):
                  reply_markup={"inline_keyboard": buttons_for(eid, st)})
         mark = "👍 관심" if st["feedback"] == "like" else "👎 해당 없음"
         _reply(chat, f"{mark}으로 기록했어요. 이유: {st['note']}", mid)
+    elif text.replace(" ", "") == "관심목록":
+        _reply(chat, liked_list(status))
     elif text.replace(" ", "") == "기준목록":
         body = "\n".join(f"{i}. {p}" for i, p in enumerate(prefs, 1)) or "(저장된 기준 없음)"
         _reply(chat, "📋 저장된 기준\n" + body + "\n\n지우기: 기준 삭제 번호")

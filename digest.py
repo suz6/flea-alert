@@ -2,7 +2,7 @@
 import html
 from datetime import timedelta
 
-from bot import fmt_day, process_feedback, send
+from bot import apply_url, fmt_day, liked_list, process_feedback, send
 from common import DATA, DIGEST_DEADLINE_DAYS, load_json, parse_date, save_json, today_kst
 
 
@@ -17,7 +17,7 @@ def main():
     rows = []
     for eid, ev in events.items():
         st = status.get(eid, {})
-        if st.get("applied") or st.get("feedback") == "dislike" or not ev.get("label"):
+        if st.get("applied") or st.get("feedback") in ("dislike", "like") or not ev.get("label"):
             continue
         dl, ed = parse_date(ev.get("deadline")), parse_date(ev.get("event_date"))
         if dl:
@@ -29,6 +29,9 @@ def main():
 
     e = html.escape
     lines = [f"🗓 <b>마감 임박 정리</b> ({t.month}/{t.day} 기준, {DIGEST_DEADLINE_DAYS}일 이내)", ""]
+    liked = liked_list(status, html_mode=True)
+    if liked:
+        lines += ["<b>⭐ 관심 공고</b>"] + liked + ["", "<b>그 밖의 마감 임박</b>"]
     if not rows:
         lines.append("이번 주는 마감 임박 공고가 없어요.")
     undated_header = False
@@ -41,7 +44,7 @@ def main():
         name = e(ev.get("name") or ev["title"][:40])
         extra = " · ".join(x for x in [ev.get("place"), ev.get("fee")] if x)
         lines.append(f"{mark} {when} | <b>{name}</b>" + (f" — {e(extra)}" if extra else ""))
-        lines.append(f"    {e(ev.get('apply_link') or ev['url'])}")
+        lines.append(f"    {e(apply_url(ev))}")
 
     chunk = ""
     for line in lines:
