@@ -542,5 +542,29 @@
   "found_at": 1791299789.4727266,
   "notified": true,
   "ekey": "2026다섯번째여주마실장터|2026-10-30"
+ },
+ "927175e9b3": {
+  "label": "ok",
+  "title": "[알림] 팔고 싶은 사람 모두 모여라! 돗자리만 들고 오세요! 10/17~18",
+  "url": "https://blog.naver.com/life-hub/224418496187",
+  "source": "다음 블로그",
+  "date": "2026-09-21",
+  "name": "허브 플리마켓",
+  "summary": "서울 강동구 허브카페 앞마당에서 열리는 이웃 주민 누구나 참여 가능한 가을 플리마켓 판매자 모집",
+  "region": "서울",
+  "place": "허브카페 앞마당 (서울 강동구 천호대로200길 15-16)",
+  "event_date": "2026-10-17",
+  "deadline": "",
+  "fee": "무료",
+  "apply_link": "https://pf.kakao.com/_UjsPb/friend",
+  "seller": "개인가능",
+  "used_goods": "가능",
+  "item_note": "중고물품, 친환경 제품, 업사이클링 소품, 작품, 먹거리 등",
+  "resident_area": "",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1791317872.7698498,
+  "notified": true,
+  "ekey": "허브플리마켓|2026-10-17"
  }
 }
