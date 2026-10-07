@@ -566,5 +566,29 @@
   "found_at": 1791317872.7698498,
   "notified": true,
   "ekey": "허브플리마켓|2026-10-17"
+ },
+ "8d4e72e2b9": {
+  "label": "check",
+  "title": "제2회 우리동네 플리마켓꿈꾸는 플리마켓🛍️",
+  "url": "https://blog.naver.com/siheungblog/224434083293",
+  "source": "다음 블로그",
+  "date": "2026-10-07",
+  "name": "우리동네 플리마켓 꿈꾸는 플리마켓",
+  "summary": "시흥시 거북섬동 주민 누구나 참여할 수 있는 꿈꾸는 플리마켓 판매자 모집 (식품 제외 중고 및 생활용품)",
+  "region": "경기",
+  "place": "경관브릿지 앞",
+  "event_date": "2026-10-10",
+  "deadline": "",
+  "fee": "",
+  "apply_link": "https://form.naver.com",
+  "seller": "주민한정",
+  "used_goods": "가능",
+  "item_note": "식품류 전제품 제외",
+  "resident_area": "시흥시 거북섬동",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1791353873.215818,
+  "notified": true,
+  "ekey": "우리동네플리마켓꿈꾸는플리마켓|2026-10-10"
  }
 }
