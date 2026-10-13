@@ -638,5 +638,29 @@
   "found_at": 1791897482.4181287,
   "notified": true,
   "ekey": null
+ },
+ "1672b344ee": {
+  "label": "ok",
+  "title": "[오산시가족센터] 2026년 다목적 가족 소통 교류공간 프로그램-제 3회 남촌동 아나바다 장터 셀러 모집",
+  "url": "https://blog.naver.com/osanhfsc/224435349171",
+  "source": "다음 블로그",
+  "date": "2026-10-08",
+  "name": "남촌동 아나바다 장터",
+  "summary": "오산천 장미공원에서 열리는 제3회 남촌동 아나바다 장터 셀러 20팀 모집",
+  "region": "경기",
+  "place": "오산천 장미공원 오산대학교 정문 앞",
+  "event_date": "2026-10-31",
+  "deadline": "2026-10-23",
+  "fee": "3,000원",
+  "apply_link": "",
+  "seller": "개인가능",
+  "used_goods": "가능",
+  "item_note": "",
+  "resident_area": "",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1791926267.532295,
+  "notified": true,
+  "ekey": "남촌동아나바다장터|2026-10-31"
  }
 }
