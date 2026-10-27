@@ -854,5 +854,29 @@
   "found_at": 1792945073.8508067,
   "notified": true,
   "ekey": "공쓰재가을플리마켓|2026-11-14"
+ },
+ "9d3b7055c6": {
+  "label": "check",
+  "title": "중구, 주민과 함께 '2026 나눔바자페스타'… 플리마켓 판매자·봉사자 모집, '바자회쿠폰' 도 사전판매",
+  "url": "https://blog.naver.com/jncc/224456208820",
+  "source": "다음 블로그",
+  "date": "2026-10-28",
+  "name": "2026 나눔바자페스타",
+  "summary": "서울 중구 충무아트센터에서 열리는 '2026 나눔바자페스타' 플리마켓 판매자 모집 공고",
+  "region": "서울",
+  "place": "충무아트센터",
+  "event_date": "2026-11-13",
+  "deadline": "2026-10-30",
+  "fee": "무료",
+  "apply_link": "",
+  "seller": "주민한정",
+  "used_goods": "가능",
+  "item_note": "",
+  "resident_area": "서울 중구",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1793143073.3759909,
+  "notified": true,
+  "ekey": "2026나눔바자페스타|2026-11-13"
  }
 }
