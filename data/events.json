@@ -902,5 +902,29 @@
   "found_at": 1793157468.0201416,
   "notified": true,
   "ekey": null
+ },
+ "3005b439a4": {
+  "label": "check",
+  "title": "서울 중구, 주민과 함께 '2026 나눔바자페스타'…플리마켓 판매자·봉사자 모집",
+  "url": "https://yonbang.net/news/article.html?no=205290",
+  "source": "다음 웹",
+  "date": "2026-10-28",
+  "name": "2026 중구 나눔바자페스타",
+  "summary": "서울 중구 거주 또는 생활권자 대상 '2026 나눔바자페스타' 플리마켓 판매자 모집",
+  "region": "서울",
+  "place": "충무아트센터",
+  "event_date": "2026-11-13",
+  "deadline": "2026-10-30",
+  "fee": "무료",
+  "apply_link": "",
+  "seller": "주민한정",
+  "used_goods": "가능",
+  "item_note": "집에서 가져온 물품, 수익금 10% 이상 기부",
+  "resident_area": "서울 중구",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1793197086.766887,
+  "notified": true,
+  "ekey": "2026중구나눔바자페스타|2026-11-13"
  }
 }
