@@ -950,5 +950,29 @@
   "found_at": 1793279878.4114373,
   "notified": true,
   "ekey": "중구나눔바자페스타|2026-11-13"
+ },
+ "5cb380f8d1": {
+  "label": "check",
+  "title": "[플리마켓] 주민 벼룩시장 판매자 모집",
+  "url": "https://blog.naver.com/hidochon/224459057570",
+  "source": "다음 블로그",
+  "date": "2026-10-30",
+  "name": "도돗마켓",
+  "summary": "성남시 도촌종합사회복지관에서 열리는 자원 재순환 주민 벼룩시장 '도돗마켓' 판매자 모집 공고",
+  "region": "경기",
+  "place": "도촌종합사회복지관",
+  "event_date": "2026-11-21",
+  "deadline": "",
+  "fee": "무료",
+  "apply_link": "https://form.naver.com",
+  "seller": "주민한정",
+  "used_goods": "가능",
+  "item_note": "",
+  "resident_area": "성남시 중원구 도촌동",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1793341072.2468174,
+  "notified": true,
+  "ekey": "도돗마켓|2026-11-21"
  }
 }
