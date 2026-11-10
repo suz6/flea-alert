@@ -929,5 +929,29 @@
   "found_at": 1794241072.3367472,
   "notified": true,
   "ekey": "광명자라라마켓|2026-11-11"
+ },
+ "0e0aa291c8": {
+  "label": "check",
+  "title": "참가비 무료, 광명 자라라마켓 참가자 모집 ! 철산로데오거리에서 내 물건 팔자",
+  "url": "https://blog.naver.com/azeda30/224471442210",
+  "source": "다음 블로그",
+  "date": "2026-11-10",
+  "name": "광명 자라라마켓",
+  "summary": "경기도 광명시 철산로데오거리에서 열리는 광명 자라라마켓 광명시민 판매자 모집 공고",
+  "region": "경기",
+  "place": "철산로데오거리 (경기도 광명시 철산동)",
+  "event_date": "",
+  "deadline": "",
+  "fee": "무료",
+  "apply_link": "",
+  "seller": "주민한정",
+  "used_goods": "가능",
+  "item_note": "생활소품, 리빙, 핸드메이드, 패션소품, 디저트 등",
+  "resident_area": "광명시",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1794309473.4495502,
+  "notified": true,
+  "ekey": null
  }
 }
