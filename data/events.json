@@ -885,5 +885,29 @@
   "found_at": 1794583078.6130643,
   "notified": true,
   "ekey": null
+ },
+ "7cfc28f207": {
+  "label": "check",
+  "title": "[서울] 2026 샤로수길 크리스마스 마켓 셀러모집",
+  "url": "https://blog.naver.com/musubimusuvi/224481967237",
+  "source": "다음 블로그",
+  "date": "2026-11-18",
+  "name": "2026 샤로수길 크리스마스 마켓",
+  "summary": "샤로수길에서 열리는 크리스마스 마켓 일반 셀러 모집 (중고물품 외 크리스마스/겨울 시즌 상품 및 핸드메이드 중심)",
+  "region": "서울",
+  "place": "서울 관악구 샤로수길 일대",
+  "event_date": "2026-12-04",
+  "deadline": "2026-11-27",
+  "fee": "무료",
+  "apply_link": "https://form.naver.com/response/Jp683Jsaixp",
+  "seller": "개인가능",
+  "used_goods": "제한",
+  "item_note": "크리스마스 소품, 핸드메이드, 공예품, 문구, 겨울 시즌 의류·잡화 등",
+  "resident_area": "",
+  "snippet": "",
+  "llm": true,
+  "found_at": 1795166266.25119,
+  "notified": true,
+  "ekey": "2026샤로수길크리스마스마켓|2026-12-04"
  }
 }
